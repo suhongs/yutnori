@@ -46,90 +46,12 @@ namespace ConsoleApp1
                     Console.Write("{0} ", i);
                 Console.WriteLine();
             }
-            static void Main(String[] args)
-            {
-                Board b = new Board();
 
-
-                Console.WriteLine();
-
-
-                b.AddRoll(b.ThrowSticks());
-                b.AddRoll(-1); b.AddRoll(3);
-
-                b.Parray();
-
-                Console.WriteLine("{0} {1}", b.GetNonZeroRollCount(), b.GetPosRollCount());
-
-                int[] testArray = new int[5];
-                testArray = b.GetRollArray();
-
-                foreach (int i in testArray)
-                    Console.Write("{0} ", i);
-                Console.WriteLine();
-
-                Console.WriteLine(b.GetRollIndex());
-
-                Console.WriteLine(b.GetRollAtIndex(1));
-                b.Reset();
-
-                b.Parray();
-
-                b.SetPlayerTurn(1);
-                Console.WriteLine(b.playerTurn);
-
-                b.AddRoll(-1); b.AddRoll(3);
-
-                b.Parray();
-
-                b.EndTurn();
-                Console.WriteLine(b.playerTurn);
-
-                b.Parray();
-
-                Console.WriteLine("초기화된 배열에 roll 추가하고");
-                b.AddRoll(-1); b.AddRoll(3); b.AddRoll(4); b.AddRoll(3);
-                b.Parray();
-
-                Console.WriteLine("3을 삭제한 후 왼쪽으로 밀기");
-                b.RemoveRoll(3);
-
-                b.Parray();
-
-                Console.WriteLine("배열이 비어있는지 확인");
-                Console.WriteLine(b.RollEmpty());
-
-                Console.WriteLine("배열의 원소가 하나고, 유일한 원소는 -1인가?");
-                Console.WriteLine(b.HasOnlyNegativeRoll());
-
-                b.RemoveRoll(4); b.Parray();
-                b.RemoveRoll(3); b.Parray();
-                Console.WriteLine("배열의 원소가 하나고, 유일한 원소는 -1인가?");
-                Console.WriteLine(b.HasOnlyNegativeRoll());
-
-                //public static List<int> CalculateLocation(int move, int location)
-
-                List<int> testlist = new List<int>();
-                testlist = Board.CalculateLocation(5, 1);
-
-                foreach (int i in testlist)
-                    Console.Write("{0} ", i);
-                Console.WriteLine();
-
-                char[] testchar = new char[3];
-                testchar = b.CalculatePath(5, 21, 2);
-
-                foreach (char i in testchar)
-                    Console.WriteLine(i);
-
-
-
-            }
 
             //roll=윷을 던진 결과를 의미함
 
-            const int MAX_ROLLS = 5;    //최대 5번까지 윷을 던질 수 있음
-            private int[] rollArray = new int[MAX_ROLLS];    //윷을 던진 결과
+            const int MAX_ROLLS = 5;                        //최대 5번까지 윷을 던질 수 있음
+            private int[] rollArray = new int[MAX_ROLLS];   //윷을 던진 결과
             private int rollIndex = 0;                      
             private int playerTurn = 0;                     //현재 차례(0 = player1, 1=player2
 
@@ -363,8 +285,8 @@ namespace ConsoleApp1
              * index 0 = 도착 위치
              * index 1 = 롤의 값
              * 
-             * 보드의 0, 5, 22번 위치에서 roll의 값이 -1일 때만 ArrayList에서 ??????
-             * 다른 위치와 롤은 오직 1 integer array만 반환한다.
+             * 두 가지 경우의 수가 있을 수 있다.
+             * 한 가지 경우의 수만 있다면 오직 1 integer array만 반환한다.
              * 
              * @param move (롤의 값)
              * @param 시작 위치
@@ -387,11 +309,9 @@ namespace ConsoleApp1
                                 location = 19;
 
                                 /*
-                                 * rolling a -1 on the bottom right tile gives you 2 possible choices.
-                                 * 첫 번째 경우는 반복문 마지막에 다룰 것임
-                                 * 지금은 두 번째 경우를 다룸
-                                 *
+                                 * 두 번째 경우의 수는 secondMove에 담음
                                  */
+
                                 int[] secondMove = new int[2];
                                 secondMove[0] = 28;
                                 secondMove[1] = move;
@@ -406,18 +326,50 @@ namespace ConsoleApp1
                         else if (location == 5)
                         {
                             if (move >= 1)
+                            {
                                 location = 19 + move;
+                                 
+                                int[] secondMove = new int[2];
+                                secondMove[0] = 5 + move;
+                                secondMove[1] = move;
+                                moveList.AddRange(secondMove);
+                            }
+                                
                             else
                                 location--;
                         }
                         else if (location == 10)
                         {
                             if (move == 1 || move == 2)
+                            {
                                 location = 24 + move;
+
+                                int[] secondMove = new int[2];
+                                secondMove[0] = 10 + move;
+                                secondMove[1] = move;
+                                moveList.AddRange(secondMove);
+                            }
+                                
                             else if (move == 3)
+                            {
                                 location = 22;
+
+                                int[] secondMove = new int[2];
+                                secondMove[0] = 10 + move;
+                                secondMove[1] = move;
+                                moveList.AddRange(secondMove);
+                            }
+                                
                             else if (move == 4 || move == 5)
+                            {
                                 location = 23 + move;
+
+                                int[] secondMove = new int[2];
+                                secondMove[0] = 10 + move;
+                                secondMove[1] = move;
+                                moveList.AddRange(secondMove);
+                            }
+                                
                             else
                                 location--;
 
@@ -425,18 +377,30 @@ namespace ConsoleApp1
                         else if (location == 15)
                         {
                             if (move > 0 && move < 5)
+                            {
                                 location += move;
+
+                                int[] secondMove = new int[2];
+                                secondMove[0] = 25 - move;
+                                secondMove[1] = move;
+                                moveList.AddRange(secondMove);
+                            }
+                                
                             else if (move == 5)
+                            {
                                 location = 0;
+
+                                int[] secondMove = new int[2];
+                                secondMove[0] = 25 - move;
+                                secondMove[1] = move;
+                                moveList.AddRange(secondMove);
+
+                            }
+                                
                             else
                             {
                                 location--;
 
-                                /*
-                                 * rolling a -1 on the bottom right tile gives you 2 possible choices.
-                                 * 첫 번째 경우는 반복문 마지막에 다룰 것임
-                                 * 지금은 두 번째 경우를 다룸
-                                 */
                                 int[] secondMove = new int[2];
                                 secondMove[0] = 24;
                                 secondMove[1] = move;
@@ -464,18 +428,40 @@ namespace ConsoleApp1
                                 location = 16;
                         }
                         else if (location == 22)
-                            if (move == 1 || move == 2 || move == 3)
+                            if (move == 1 || move == 2 )
+                            {
                                 location = 26 + move;
+
+                                int[] secondMove = new int[2];
+                                secondMove[0] = 22 + move;
+                                secondMove[1] = move;
+                                moveList.AddRange(secondMove);
+
+                            }
+                            else if (move == 3)
+                            {
+                                location = 29;
+
+                                int[] secondMove = new int[2];
+                                secondMove[0] = 15;
+                                secondMove[1] = move;
+                                moveList.AddRange(secondMove);
+                            }
+                                
                             else if (move > 3)
+                            {
                                 location = 32;
+
+                                int[] secondMove = new int[2];
+                                secondMove[0] = 12 +  move;
+                                secondMove[1] = move;
+                                moveList.AddRange(secondMove);
+                            }
+                                
                             else
                             {
                                 location = 21;
 
-                                /*rolling a -1 on the bottom right tile gives you 2 possible choices.
-                                * 첫 번째 경우는 반복문 마지막에 다룰 것임
-                                * 지금은 두 번째 경우를 다룸
-                                */
                                 int[] secondMove = new int[2];
                                 secondMove[0] = 26;
                                 secondMove[1] = move;
