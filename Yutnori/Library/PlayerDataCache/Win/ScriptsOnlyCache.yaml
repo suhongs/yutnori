@@ -1838,4 +1838,4 @@ ScriptsOnlyBuild:
   - Assets/Scenes/Room.unity
   - Assets/Scenes/GAME1.unity
   - Assets/Scenes/ENDING.unity
-  playerPath: "C:/Users/rlatn/OneDrive/\uBC14\uD0D5 \uD654\uBA74/Yutnori.exe"
+  playerPath: C:/Users/rlatn/gitHub_suhongs/Yutnori.exe
