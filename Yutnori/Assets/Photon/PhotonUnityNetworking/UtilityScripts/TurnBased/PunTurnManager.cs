@@ -157,7 +157,6 @@ namespace Photon.Pun.UtilityScripts
             Turn = this.Turn + 1; // note: this will set a property in the room, which is available to the other players.
         }
 
-
         /// <summary>
         /// Call to send an action. Optionally finish the turn, too.
         /// The move object can be anything. Try to optimize though and only send the strict minimum set of information to define the turn move.
